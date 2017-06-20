@@ -7,23 +7,37 @@
 //
 
 #import "ViewController.h"
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
+@interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>{
+    CLLocationManager *locationManager;
+}
 
-@interface ViewController ()
+@property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
 
 @end
 
 @implementation ViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-}
+    locationManager = [CLLocationManager new];
+    [locationManager requestAlwaysAuthorization];
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    locationManager.activityType = CLActivityTypeAutomotiveNavigation;
+    locationManager.delegate = self;
+    [locationManager startUpdatingLocation];
+    }
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    CLLocation *location = locations.lastObject;
+    CLLocationCoordinate2D coordinate = location.coordinate;
+    NSLog(@"Current location: %.6f , %.6f", coordinate.latitude , coordinate.longitude);
+}
 
 @end
