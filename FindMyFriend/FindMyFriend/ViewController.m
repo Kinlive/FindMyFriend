@@ -38,6 +38,13 @@
     CLLocation *location = locations.lastObject;
     CLLocationCoordinate2D coordinate = location.coordinate;
     NSLog(@"Current location: %.6f , %.6f", coordinate.latitude , coordinate.longitude);
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        MKCoordinateRegion region ;
+        region.center = coordinate ;
+        region.span = MKCoordinateSpanMake(0.01, 0.01);
+        [_mainMapView setRegion:region  animated: true];
+    });
 }
 
 @end
