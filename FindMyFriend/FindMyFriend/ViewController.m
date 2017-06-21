@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "AFNetworking.h"
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>{
     CLLocationManager *locationManager;
 }
@@ -58,11 +59,36 @@
     });
 }
 - (IBAction)openOrCloseReport:(id)sender {
+    CLLocationCoordinate2D coordinate = locationManager.location.coordinate;
     if(_switchStatus.on){
+//        UIAlertController *alert = UIAlertViewStyleDefault;
+        //記得加警告視窗詢問user
+        //upload.
+//        NSURL *url = [NSURL URLWithString:@""];
+//        NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
+//        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+//        NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+//        NSData *uploadDate = ;
+        //AFNetworking 應用基本流程
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        NSDictionary *parameters = @{
+                                     @"GroupName":@"bp102",
+                                     @"UserName":@"Kinwe",
+                                     @"Lat":@"latitude",
+                                     @"Lon":@"lontitude"
+                                     };
+        [manager POST:@"http://class.softarts.cc/FindMyFriends/updateUserLocation.php" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+            NSLog(@"JSON:%@", responseObject);
+        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+            NSLog(@"Error: %@", error);
+        }];
+                                   
         
     }else{
         
     }
+    
+    
 }
 //-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 //    NSLog(@"Error here: .....%@" , error);
