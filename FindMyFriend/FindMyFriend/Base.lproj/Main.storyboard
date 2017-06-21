@@ -24,9 +24,17 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lM4-hA-KFv">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ETZ-oc-aCc">
+                                <rect key="frame" x="310" y="28" width="51" height="31"/>
+                                <connections>
+                                    <action selector="openOrCloseReport:" destination="BYZ-38-t0r" eventType="valueChanged" id="cCn-O5-EiL"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="ETZ-oc-aCc" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="Cl7-kD-CX0"/>
+                            <constraint firstAttribute="trailing" secondItem="ETZ-oc-aCc" secondAttribute="trailing" constant="16" id="ILz-do-Fre"/>
                             <constraint firstItem="lM4-hA-KFv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="POC-xS-Nwj"/>
                             <constraint firstAttribute="trailing" secondItem="lM4-hA-KFv" secondAttribute="trailing" id="hME-nb-Ebd"/>
                             <constraint firstItem="lM4-hA-KFv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kSO-Ki-3Kg"/>
@@ -35,6 +43,7 @@
                     </view>
                     <connections>
                         <outlet property="mainMapView" destination="lM4-hA-KFv" id="awQ-uK-9S9"/>
+                        <outlet property="switchStatus" destination="ETZ-oc-aCc" id="AdS-0f-JiX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

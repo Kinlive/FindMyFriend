@@ -12,6 +12,7 @@
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>{
     CLLocationManager *locationManager;
 }
+@property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
 
@@ -22,12 +23,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     locationManager = [CLLocationManager new];
+    locationManager.delegate = self;
+//    [locationManager requestWhenInUseAuthorization];
     [locationManager requestAlwaysAuthorization];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    locationManager.activityType = CLActivityTypeAutomotiveNavigation;
-    locationManager.delegate = self;
-    [locationManager startUpdatingLocation];
-    }
+    locationManager.activityType = CLActivityTypeFitness;
+    //檢查版本是否為IOS 9.0以上,因allowsBackgroundLocationUpdates為IOS9.0版本後才能使用
+//    if ([[UIDevice currentDevice].systemVersion floatValue]  >= 9.0) {
+        locationManager.allowsBackgroundLocationUpdates = YES;
+//        [locationManager requestLocation];
+//    }
+//    else {
+        [locationManager startUpdatingLocation];
+//    }
+    
+    
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -42,9 +53,18 @@
     dispatch_once(&onceToken, ^{
         MKCoordinateRegion region ;
         region.center = coordinate ;
-        region.span = MKCoordinateSpanMake(0.01, 0.01);
+        region.span = MKCoordinateSpanMake(0.001, 0.001);
         [_mainMapView setRegion:region  animated: true];
     });
 }
-
+- (IBAction)openOrCloseReport:(id)sender {
+    if(_switchStatus.on){
+        
+    }else{
+        
+    }
+}
+//-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+//    NSLog(@"Error here: .....%@" , error);
+//}
 @end
