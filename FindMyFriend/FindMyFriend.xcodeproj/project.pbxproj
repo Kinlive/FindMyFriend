@@ -15,6 +15,7 @@
 		112F685F1EF95D4C0043E091 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 112F685D1EF95D4C0043E091 /* LaunchScreen.storyboard */; };
 		112F68681EF961930043E091 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112F68671EF961930043E091 /* MapKit.framework */; };
 		112F686A1EF961BA0043E091 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112F68691EF961BA0043E091 /* CoreLocation.framework */; };
+		112F686D1EFC16C30043E091 /* DXHTTPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F686C1EFC16C30043E091 /* DXHTTPManager.m */; };
 		2311101AA703FF28A8D41AB0 /* libPods-FindMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 985E0FC0ECECA0A64B4D79D3 /* libPods-FindMyFriend.a */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,8 @@
 		112F68601EF95D4C0043E091 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		112F68671EF961930043E091 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		112F68691EF961BA0043E091 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		112F686B1EFC16C30043E091 /* DXHTTPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DXHTTPManager.h; sourceTree = "<group>"; };
+		112F686C1EFC16C30043E091 /* DXHTTPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DXHTTPManager.m; sourceTree = "<group>"; };
 		61260FA5C0832BC63A076A68 /* Pods-FindMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindMyFriend.release.xcconfig"; path = "Pods/Target Support Files/Pods-FindMyFriend/Pods-FindMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		895EB1244D2DB28AB2FDCF8C /* Pods-FindMyFriend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindMyFriend.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FindMyFriend/Pods-FindMyFriend.debug.xcconfig"; sourceTree = "<group>"; };
 		985E0FC0ECECA0A64B4D79D3 /* libPods-FindMyFriend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FindMyFriend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +76,8 @@
 			children = (
 				112F68521EF95D4C0043E091 /* AppDelegate.h */,
 				112F68531EF95D4C0043E091 /* AppDelegate.m */,
+				112F686B1EFC16C30043E091 /* DXHTTPManager.h */,
+				112F686C1EFC16C30043E091 /* DXHTTPManager.m */,
 				112F68551EF95D4C0043E091 /* ViewController.h */,
 				112F68561EF95D4C0043E091 /* ViewController.m */,
 				112F68581EF95D4C0043E091 /* Main.storyboard */,
@@ -240,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				112F68571EF95D4C0043E091 /* ViewController.m in Sources */,
+				112F686D1EFC16C30043E091 /* DXHTTPManager.m in Sources */,
 				112F68541EF95D4C0043E091 /* AppDelegate.m in Sources */,
 				112F68511EF95D4C0043E091 /* main.m in Sources */,
 			);

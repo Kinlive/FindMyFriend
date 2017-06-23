@@ -10,8 +10,12 @@
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "AFNetworking.h"
+#import "DXHTTPManager.h"
+#define GROUPNAME_TAG @"bp102"
+#define USERNAME_TAG     @"Kinwe"
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>{
     CLLocationManager *locationManager;
+    CLLocation *lastLocation;
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 
@@ -48,6 +52,7 @@
 }
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     CLLocation *location = locations.lastObject;
+    lastLocation = locations.lastObject;
     CLLocationCoordinate2D coordinate = location.coordinate;
     NSLog(@"Current location: %.6f , %.6f", coordinate.latitude , coordinate.longitude);
     static dispatch_once_t onceToken;
@@ -59,7 +64,9 @@
     });
 }
 - (IBAction)openOrCloseReport:(id)sender {
-    CLLocationCoordinate2D coordinate = locationManager.location.coordinate;
+    CLLocationCoordinate2D coordinate = lastLocation.coordinate;
+    NSString *strLat = [NSString stringWithFormat:@"%f",coordinate.latitude];
+    NSString *strLon = [NSString stringWithFormat:@"%f",coordinate.longitude];
     if(_switchStatus.on){
 //        UIAlertController *alert = UIAlertViewStyleDefault;
         //記得加警告視窗詢問user
@@ -68,24 +75,41 @@
 //        NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
 //        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
 //        NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
-//        NSData *uploadDate = ;
-        //AFNetworking 應用基本流程
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        NSDictionary *parameters = @{
-                                     @"GroupName":@"bp102",
-                                     @"UserName":@"Kinwe",
-                                     @"Lat":@"latitude",
-                                     @"Lon":@"lontitude"
-                                     };
-        [manager POST:@"http://class.softarts.cc/FindMyFriends/updateUserLocation.php" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            NSLog(@"JSON:%@", responseObject);
-        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-            NSLog(@"Error: %@", error);
-        }];
-                                   
         
+        //AFNetworking 應用基本流程
+//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        DXHTTPManager *manager = [DXHTTPManager manager];
+        NSDictionary *parameters = @{
+                                     @"GroupName": GROUPNAME_TAG,
+                                     @"UserName":  USERNAME_TAG,
+                                     @"Lat" : @24.836957 ,
+                                     @"Lon" : @121.017454
+                                     };
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:NSJSONWritingPrettyPrinted error:&error];
+        NSLog(@"測試輸出Lat: %@ & Lon :%@", strLat , strLon) ;
+//        NSData *uploadDate = [NSKeyedArchiver archivedDataWithRootObject:parameters];
+      [manager POST:@"http://class.softarts.cc/FindMyFriends/updateUserLocation.php" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+          NSLog(@"JSON:%@", responseObject);
+          NSLog(@"回報中.....");
+      } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+          NSLog(@"Error: %@  ", error);
+          NSLog(@"回報失敗....");
+
+      }];
+      //以下貌似出現AFNetworking 經典bug , content type: txt/html ,code:200 ,
+//以另外用DXHTTP解決
+//        [manager POST:@"http://class.softarts.cc/FindMyFriends/updateUserLocation.php" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//            NSLog(@"JSON:%@", responseObject);
+//            NSLog(@"回報中.....");
+//        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+//            NSString *myString = [[NSString alloc] initWithData:operation.request.HTTPBody encoding:NSUTF8StringEncoding];
+//            NSLog(@"Error: %@  %@", error , myString);
+//            NSLog(@"回報失敗....");
+//        }];
     }else{
         
+        NSLog(@"使用者關閉回報!!");
     }
     
     
