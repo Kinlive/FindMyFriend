@@ -63,6 +63,7 @@
         [_mainMapView setRegion:region  animated: true];
     });
 }
+
 - (IBAction)openOrCloseReport:(id)sender {
     CLLocationCoordinate2D coordinate = lastLocation.coordinate;
     NSString *strLat = [NSString stringWithFormat:@"%f",coordinate.latitude];
@@ -71,34 +72,24 @@
 //        UIAlertController *alert = UIAlertViewStyleDefault;
         //記得加警告視窗詢問user
         //upload.
-//        NSURL *url = [NSURL URLWithString:@""];
-//        NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
-//        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-//        NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
-        
         //AFNetworking 應用基本流程
-//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
         DXHTTPManager *manager = [DXHTTPManager manager];
-        NSDictionary *parameters = @{
-                                     @"GroupName": GROUPNAME_TAG,
-                                     @"UserName":  USERNAME_TAG,
-                                     @"Lat" : @24.836957 ,
-                                     @"Lon" : @121.017454
-                                     };
-        NSError *error = nil;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:NSJSONWritingPrettyPrinted error:&error];
-        NSLog(@"測試輸出Lat: %@ & Lon :%@", strLat , strLon) ;
-//        NSData *uploadDate = [NSKeyedArchiver archivedDataWithRootObject:parameters];
-      [manager POST:@"http://class.softarts.cc/FindMyFriends/updateUserLocation.php" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-          NSLog(@"JSON:%@", responseObject);
-          NSLog(@"回報中.....");
-      } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-          NSLog(@"Error: %@  ", error);
-          NSLog(@"回報失敗....");
-
-      }];
-      //以下貌似出現AFNetworking 經典bug , content type: txt/html ,code:200 ,
-//以另外用DXHTTP解決
+        NSString *url = @"http://class.softarts.cc/FindMyFriends/updateUserLocation.php?";
+        NSString *parameters = [NSString stringWithFormat:@"GroupName=%@&UserName=%@&Lat=%@&Lon=%@",GROUPNAME_TAG,USERNAME_TAG,strLat,strLon];
+      NSString *urlAddParameters = [url stringByAppendingString:parameters];
+        [manager GET:urlAddParameters parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+            //..
+             NSLog(@"回報中.....%@", url);
+            NSLog(@"Server response:%@", responseObject);
+        } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+            //..
+            NSLog(@"回報失敗....");
+             NSLog(@"Error: %@  ", error);
+        }];
+    
+//以下貌似出現AFNetworking 經典bug , content type: txt/html ,code:200 ,
+//已另外用DXHTTP解決
 //        [manager POST:@"http://class.softarts.cc/FindMyFriends/updateUserLocation.php" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
 //            NSLog(@"JSON:%@", responseObject);
 //            NSLog(@"回報中.....");
