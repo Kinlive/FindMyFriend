@@ -20,10 +20,10 @@
 #define KEY_TAG @"friends"
 
 @interface RequestMaster : NSObject{
-    NSArray *infoResult;
+    NSArray<GetFriend*> *infoResult;
 }
 -(void) startRequestServerWithCoordinateLat:(NSString*) lat andLon:(NSString*) lon;
--(void) startGetFriendsInfo;
+-(NSArray<GetFriend*>*) startGetFriendsInfo;
 -(NSArray<GetFriend*>*) getInfoResult;
 
 @end
