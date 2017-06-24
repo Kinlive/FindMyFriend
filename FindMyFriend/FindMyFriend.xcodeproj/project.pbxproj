@@ -17,6 +17,7 @@
 		112F686A1EF961BA0043E091 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112F68691EF961BA0043E091 /* CoreLocation.framework */; };
 		112F686D1EFC16C30043E091 /* DXHTTPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F686C1EFC16C30043E091 /* DXHTTPManager.m */; };
 		112F68701EFE1ECF0043E091 /* GetFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F686F1EFE1ECF0043E091 /* GetFriend.m */; };
+		112F68731EFE3A5D0043E091 /* RequestMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68721EFE3A5D0043E091 /* RequestMaster.m */; };
 		2311101AA703FF28A8D41AB0 /* libPods-FindMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 985E0FC0ECECA0A64B4D79D3 /* libPods-FindMyFriend.a */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,8 @@
 		112F686C1EFC16C30043E091 /* DXHTTPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DXHTTPManager.m; sourceTree = "<group>"; };
 		112F686E1EFE1ECF0043E091 /* GetFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetFriend.h; sourceTree = "<group>"; };
 		112F686F1EFE1ECF0043E091 /* GetFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetFriend.m; sourceTree = "<group>"; };
+		112F68711EFE3A5D0043E091 /* RequestMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestMaster.h; sourceTree = "<group>"; };
+		112F68721EFE3A5D0043E091 /* RequestMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestMaster.m; sourceTree = "<group>"; };
 		61260FA5C0832BC63A076A68 /* Pods-FindMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindMyFriend.release.xcconfig"; path = "Pods/Target Support Files/Pods-FindMyFriend/Pods-FindMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		895EB1244D2DB28AB2FDCF8C /* Pods-FindMyFriend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindMyFriend.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FindMyFriend/Pods-FindMyFriend.debug.xcconfig"; sourceTree = "<group>"; };
 		985E0FC0ECECA0A64B4D79D3 /* libPods-FindMyFriend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FindMyFriend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,6 +86,8 @@
 				112F686C1EFC16C30043E091 /* DXHTTPManager.m */,
 				112F68551EF95D4C0043E091 /* ViewController.h */,
 				112F68561EF95D4C0043E091 /* ViewController.m */,
+				112F68711EFE3A5D0043E091 /* RequestMaster.h */,
+				112F68721EFE3A5D0043E091 /* RequestMaster.m */,
 				112F686E1EFE1ECF0043E091 /* GetFriend.h */,
 				112F686F1EFE1ECF0043E091 /* GetFriend.m */,
 				112F68581EF95D4C0043E091 /* Main.storyboard */,
@@ -254,6 +259,7 @@
 				112F68541EF95D4C0043E091 /* AppDelegate.m in Sources */,
 				112F68701EFE1ECF0043E091 /* GetFriend.m in Sources */,
 				112F68511EF95D4C0043E091 /* main.m in Sources */,
+				112F68731EFE3A5D0043E091 /* RequestMaster.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

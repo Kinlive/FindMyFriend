@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
 @interface DXHTTPManager : AFHTTPRequestOperationManager
-
+//先將其繼承
 @end

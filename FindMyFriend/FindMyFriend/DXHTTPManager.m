@@ -9,6 +9,7 @@
 #import "DXHTTPManager.h"
 
 @implementation DXHTTPManager
+//以下開始改寫AFNetworking manager內原先定義的翻譯類型
 //instancetype 可以辨識回傳型別的關鍵字
 //建立類別,並且改寫父類別建構子
 + (instancetype)manager {
@@ -20,7 +21,7 @@
     newSet.set = dxManager.responseSerializer.acceptableContentTypes;
     //對於server序列化的回應,我們的manager需要可翻譯text/html的類型
     [newSet addObject:@"text/html"];
-    //將原本可接受的類型的內容進行改寫承我們自定義的
+    //將原本可接受的類型的內容進行改寫成我們自定義的
     dxManager.responseSerializer.acceptableContentTypes = newSet;
     
     return dxManager;
