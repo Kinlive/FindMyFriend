@@ -11,12 +11,13 @@
 #import <CoreLocation/CoreLocation.h>
 #import "RequestMaster.h"
 #import "GetFriend.h"
-@interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>{
+#import "CreateAnnotation.h"
+@interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>
+{
     CLLocationManager *locationManager;
     CLLocation *lastLocation;
     RequestMaster *requestMaster;
     NSArray<GetFriend*> *friendsInfo ;//裝入requestMaster回傳的info
-    int countFriends;//計算目前得到的是第幾個朋友
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
@@ -43,10 +44,6 @@
         [locationManager startUpdatingLocation];
 //    }
      requestMaster = [RequestMaster new];
-    //一定要進行初始化才能裝東西
-//    friendsInfo = [NSMutableArray new];
-    countFriends = 0;
-    
     
 }
 
@@ -82,62 +79,38 @@
         //upload.
         [requestMaster startRequestServerWithCoordinateLat:strLat andLon:strLon];
        }else{
-        
         NSLog(@"使用者關閉回報!!");
     }
 }
 //To get friends info's button.
 - (IBAction)getMyfriend:(id)sender {
-  //    friendsInfo =
-//    friendsInfo = [requestMaster startGetFriendsInfo];
     friendsInfo = [requestMaster startGetFriendsInfo];
-    
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5.0* NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^{
-        ////////做個時間延遲,因此時還沒載入資料,但friendsInfo卻使用到了,以
+        ////////做個時間延遲,因此時還沒載入資料,但friendsInfo卻使用到了會crash
         ///add friends anotation on map ...
+         int countFriends = 0;
         while (countFriends  < friendsInfo.count ) {
-            double lat = friendsInfo[countFriends].lat ;
-            double lon = friendsInfo[countFriends].lon;
-            CLLocationCoordinate2D friendCoord = {(lat),(lon)};
-            MKPointAnnotation *friendAnno = [MKPointAnnotation new];
-            friendAnno.coordinate = friendCoord;
-            friendAnno.title = friendsInfo[countFriends].name;
-            friendAnno.subtitle = friendsInfo[countFriends].dateTime;
-            [_mainMapView addAnnotation:friendAnno];
-            //        [_mainMapView addAnnotation:lastAnno];
-            NSLog(@"TITLE:有沒有拿到%@",friendAnno.title);
+            CreateAnnotation *anno = [CreateAnnotation new];
+            [_mainMapView addAnnotation:[anno createAnnotationWithFriendsInfo:friendsInfo andCountFriends:countFriends]];
             countFriends += 1 ;
         }
-     
-        //Create friends coordinate
-//        //test Annotation .......
-//        CLLocationCoordinate2D lastCoor = lastLocation.coordinate;
-//        MKPointAnnotation *lastAnno = [MKPointAnnotation new];
-//        lastCoor.latitude += 0.005;
-//        lastCoor.longitude += 0.005;
-//        lastAnno.coordinate = lastCoor;
-//        
-        //.....
-           });
-//     friendsInfo = [requestMaster getInfoResult];
+    });
 }
-//Add friends anotation ...
+//When add one friend anotation ,it will ask this method...
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
     if (annotation == mapView.userLocation){
         return nil;
     }
-    NSString *identifier = friendsInfo[countFriends].name;
+    NSString *identifier = @"friend";
     MKPinAnnotationView *result = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     if( result == nil){
         result = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
     }else{
         result.annotation = annotation;
     }
-    
     result.canShowCallout = true;
     return  result;
-    
 }
 
 //-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
