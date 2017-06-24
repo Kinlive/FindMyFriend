@@ -24,6 +24,6 @@
 }
 -(void) startRequestServerWithCoordinateLat:(NSString*) lat andLon:(NSString*) lon;
 -(void) startGetFriendsInfo;
--(NSArray*) getInfoResult;
+-(NSArray<GetFriend*>*) getInfoResult;
 
 @end

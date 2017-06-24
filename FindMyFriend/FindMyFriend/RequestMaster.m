@@ -27,7 +27,7 @@
         }];
 }
 -(void) startGetFriendsInfo{
-    NSMutableArray *getFriendArray;
+    NSMutableArray<GetFriend*> *getFriendArray;
     DXHTTPManager *manager = [DXHTTPManager manager];
     NSString *url = GETINFOURL_TAG;
     [manager GET:url parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
@@ -55,7 +55,7 @@
         NSLog(@"Error: %@  ", error);
     }];
 }
--(NSArray*)getInfoResult{
+-(NSArray<GetFriend*>*)getInfoResult{
     return infoResult;
 }
 
