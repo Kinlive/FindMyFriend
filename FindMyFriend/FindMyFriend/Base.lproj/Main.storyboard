@@ -30,6 +30,21 @@
                                     <action selector="openOrCloseReport:" destination="BYZ-38-t0r" eventType="valueChanged" id="cCn-O5-EiL"/>
                                 </connections>
                             </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q9s-8H-9Zg">
+                                <rect key="frame" x="57" y="460" width="254" height="144"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ip0-Ee-DGq">
+                                <rect key="frame" x="123" y="49" width="128" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Get my friend"/>
+                                <connections>
+                                    <action selector="getMyfriend:" destination="BYZ-38-t0r" eventType="touchUpInside" id="72N-CX-138"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -43,6 +58,7 @@
                     </view>
                     <connections>
                         <outlet property="mainMapView" destination="lM4-hA-KFv" id="awQ-uK-9S9"/>
+                        <outlet property="showMyFriend" destination="Q9s-8H-9Zg" id="cJD-ei-uVo"/>
                         <outlet property="switchStatus" destination="ETZ-oc-aCc" id="AdS-0f-JiX"/>
                     </connections>
                 </viewController>

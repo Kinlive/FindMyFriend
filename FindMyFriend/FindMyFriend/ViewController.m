@@ -11,15 +11,18 @@
 #import <CoreLocation/CoreLocation.h>
 #import "AFNetworking.h"
 #import "DXHTTPManager.h"
+#import "GetFriend.h"
 #define GROUPNAME_TAG @"bp102"
 #define USERNAME_TAG     @"Kinwe"
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>{
     CLLocationManager *locationManager;
     CLLocation *lastLocation;
+    NSMutableArray *getFriendArray;
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
+@property (weak, nonatomic) IBOutlet UILabel *showMyFriend;
 
 @end
 
@@ -102,9 +105,62 @@
         
         NSLog(@"使用者關閉回報!!");
     }
+}
+- (IBAction)getMyfriend:(id)sender {
+    DXHTTPManager *manager = [DXHTTPManager manager];
+    NSString *url = @"http://class.softarts.cc/FindMyFriends/queryFriendLocations.php?GroupName=bp102";
+    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        //..
+        NSLog(@"回報中.....%@", url);
+        NSLog(@"Server response:%@", responseObject);
+        //此處因為AFNetworking 的manager 已經有自動將responseObject進行JSON轉換為dictionary,因此可以如下方直接以key的方式呼叫出整個陣列;
+        NSArray *friendArray = responseObject[@"friends"];
+        for (int i =0 ; i< friendArray.count; i++) {
+            GetFriend *getFriend = [GetFriend new];
+            getFriend.name = friendArray[i][@"friendName"];
+            getFriend.dateTime = friendArray[i][@"lastUpdateDateTime"];
+            getFriend.lat = [friendArray[i][@"lat"] doubleValue];
+            getFriend.lon = [friendArray[i][@"lon"] doubleValue];
+//            NSLog(@"第%d筆朋友: %@ , %@, %lf , %lf", i+1 , getFriend.name, getFriend.dateTime,getFriend.lat,getFriend.lon); 測試有沒有正確拿到
+            //正確取得朋友資料並加入陣列,待顯示使用
+             [getFriendArray addObject:getFriend];
+        }
+        
+        
+//        getFriend.name = responseObject[@"friends"][0][@"friendName"];
+//        NSLog(@"%@",getFriend.dateTime);
+//        NSError *error;
+    //        NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&error ];
+        
+//        if ([jsonResponse isKindOfClass:[NSDictionary class]]){
+//            NSArray *dicArray = jsonResponse[@"friends"];
+//            if([dicArray isKindOfClass:[NSArray class]]){
+//                for(NSDictionary *dictionary in jsonResponse){
+//                    GetFriend *getFriend = [GetFriend new];
+//                    getFriend.name = [dictionary objectForKey:@"friendName"];
+//                    getFriend.dateTime = [dictionary objectForKey:@"lastUpdateDateTime"];
+//                    getFriend.lat = [[dictionary objectForKey:@"lat"] doubleValue];
+//                    getFriend.lon = [[dictionary objectForKey:@"lon"] doubleValue];
+//                    [getFriendArray addObject:getFriend];
+//                }
+//            }
+//        }
+       
+        
+        
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        //..
+        NSLog(@"回報失敗....");
+        NSLog(@"Error: %@  ", error);
+    }];
+    
+    
+    
     
     
 }
+
 //-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 //    NSLog(@"Error here: .....%@" , error);
 //}
