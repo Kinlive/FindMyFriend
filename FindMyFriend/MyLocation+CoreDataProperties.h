@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<MyLocation *> *)fetchRequest;
 
-@property (nullable, nonatomic, copy) NSString *dateTime;
+@property (nullable, nonatomic, copy) NSDate *dateTime;
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
 

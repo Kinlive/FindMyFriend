@@ -79,18 +79,12 @@
     });
 //    //3. When created both of context & entity then get new object
     myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:context];
-    //做個時間轉換 
+    //Data save.
     NSError *error ;
-//    NSDate *date = [NSDate date];
-//    NSDateFormatter *datef=[[NSDateFormatter alloc]init];
-//    [datef setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    NSString *strDate=[datef stringFromDate:date];
-    //core data save
-//    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     //4. Object set value(entity property) ..
     myCoreData.latitude = lastLocation.coordinate.latitude;
     myCoreData.longitude = lastLocation.coordinate.longitude;
-//    myCoreData.dateTime = strDate;
+    myCoreData.dateTime = [NSDate date];
     //5. Context save .
     if (![context save:&error]) {
         NSLog(@"Save Error!!");
