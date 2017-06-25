@@ -2,6 +2,18 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:MyLocation+CoreDataClass.h">
+   </FileRef>
+   <FileRef
+      location = "group:MyLocation+CoreDataClass.m">
+   </FileRef>
+   <FileRef
+      location = "group:MyLocation+CoreDataProperties.h">
+   </FileRef>
+   <FileRef
+      location = "group:MyLocation+CoreDataProperties.m">
+   </FileRef>
+   <FileRef
       location = "group:FindMyFriend.xcodeproj">
    </FileRef>
    <FileRef

@@ -1,9 +1,9 @@
 //
 //  MyLocation+CoreDataProperties.h
-//  FindMyFriend
+//  
 //
 //  Created by Kinlive on 2017/6/25.
-//  Copyright © 2017年 Kinlive Wei. All rights reserved.
+//
 //
 
 #import "MyLocation+CoreDataClass.h"
@@ -15,8 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<MyLocation *> *)fetchRequest;
 
-@property (nonatomic) double lontitude;
+@property (nullable, nonatomic, copy) NSString *dateTime;
 @property (nonatomic) double latitude;
+@property (nonatomic) double longitude;
 
 @end
 

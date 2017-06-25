@@ -14,6 +14,7 @@
 #import "CreateAnnotation.h"
 #import "MyLocation+CoreDataClass.h"
 #import "AppDelegate.h"
+
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>
 {
     CLLocationManager *locationManager;
@@ -23,6 +24,7 @@
     MyLocation *myCoreData;
     NSManagedObjectContext *context;
     NSEntityDescription *entity;
+
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
@@ -50,16 +52,10 @@
 //    }
      requestMaster = [RequestMaster new];
     ///=====coredata use
+    //1. create context
     context = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).persistentContainer.viewContext;
-    myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:context];
+    //2. create entity
     entity = [NSEntityDescription entityForName:@"MyLocation" inManagedObjectContext:context];
-    
-    
-    
-//    NSArray *results = []
-    
-//    myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:[self ]]
-
     
 }
 
@@ -81,17 +77,42 @@
         region.span = MKCoordinateSpanMake(0.01, 0.01);
         [_mainMapView setRegion:region  animated: true];
     });
-//core data save
+//    //3. When created both of context & entity then get new object
+    myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:context];
+    //做個時間轉換 
     NSError *error ;
+//    NSDate *date = [NSDate date];
+//    NSDateFormatter *datef=[[NSDateFormatter alloc]init];
+//    [datef setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    NSString *strDate=[datef stringFromDate:date];
+    //core data save
+//    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    //4. Object set value(entity property) ..
     myCoreData.latitude = lastLocation.coordinate.latitude;
-    myCoreData.lontitude = lastLocation.coordinate.longitude;
-    if(![context save:&error]){
-        NSLog(@"error!");
+    myCoreData.longitude = lastLocation.coordinate.longitude;
+//    myCoreData.dateTime = strDate;
+    //5. Context save .
+    if (![context save:&error]) {
+        NSLog(@"Save Error!!");
     }else{
-        NSLog(@"Save coordinate OK!!!!!");
+        NSLog(@"Save Is  OK!!");
     }
-    
+
 }
+//Get Data button
+- (IBAction)getData:(id)sender {
+    //6. FetchRequest : it's for get saved data
+    NSError *error;
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    //to get all data in database.
+    NSArray *results = [[context executeFetchRequest:request error:&error] copy];
+    for(MyLocation *p in results){
+        NSLog(@"Here get Data!!!!");
+        NSLog(@">>>> Latitude : %lf  , Lontitude : %lf   andData: %@",p.latitude , p.longitude,p.dateTime);
+    }
+}
+
 //Swith for request Server (on/off).
 - (IBAction)openOrCloseReport:(id)sender {
     CLLocationCoordinate2D coordinate = lastLocation.coordinate;
