@@ -79,6 +79,7 @@
         //upload.
         [requestMaster startRequestServerWithCoordinateLat:strLat andLon:strLon];
        }else{
+           //做一個提示使用者關閉回報的訊息
         NSLog(@"使用者關閉回報!!");
     }
 }
