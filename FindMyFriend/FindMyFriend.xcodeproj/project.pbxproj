@@ -19,7 +19,9 @@
 		112F68701EFE1ECF0043E091 /* GetFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F686F1EFE1ECF0043E091 /* GetFriend.m */; };
 		112F68731EFE3A5D0043E091 /* RequestMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68721EFE3A5D0043E091 /* RequestMaster.m */; };
 		112F68761EFE98390043E091 /* CreateAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68751EFE98390043E091 /* CreateAnnotation.m */; };
-		112F68791EFF8A3D0043E091 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 112F68771EFF8A3D0043E091 /* Model.xcdatamodeld */; };
+		112F68A21EFF91F60043E091 /* MyLocation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 112F68A01EFF91F60043E091 /* MyLocation.xcdatamodeld */; };
+		112F68A71EFF946C0043E091 /* MyLocation+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68A41EFF946C0043E091 /* MyLocation+CoreDataClass.m */; };
+		112F68A81EFF946C0043E091 /* MyLocation+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68A61EFF946C0043E091 /* MyLocation+CoreDataProperties.m */; };
 		2311101AA703FF28A8D41AB0 /* libPods-FindMyFriend.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 985E0FC0ECECA0A64B4D79D3 /* libPods-FindMyFriend.a */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +46,11 @@
 		112F68721EFE3A5D0043E091 /* RequestMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestMaster.m; sourceTree = "<group>"; };
 		112F68741EFE98390043E091 /* CreateAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateAnnotation.h; sourceTree = "<group>"; };
 		112F68751EFE98390043E091 /* CreateAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateAnnotation.m; sourceTree = "<group>"; };
-		112F68781EFF8A3D0043E091 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		112F68A11EFF91F60043E091 /* MyLocation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyLocation.xcdatamodel; sourceTree = "<group>"; };
+		112F68A31EFF946C0043E091 /* MyLocation+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MyLocation+CoreDataClass.h"; sourceTree = "<group>"; };
+		112F68A41EFF946C0043E091 /* MyLocation+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MyLocation+CoreDataClass.m"; sourceTree = "<group>"; };
+		112F68A51EFF946C0043E091 /* MyLocation+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MyLocation+CoreDataProperties.h"; sourceTree = "<group>"; };
+		112F68A61EFF946C0043E091 /* MyLocation+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MyLocation+CoreDataProperties.m"; sourceTree = "<group>"; };
 		61260FA5C0832BC63A076A68 /* Pods-FindMyFriend.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindMyFriend.release.xcconfig"; path = "Pods/Target Support Files/Pods-FindMyFriend/Pods-FindMyFriend.release.xcconfig"; sourceTree = "<group>"; };
 		895EB1244D2DB28AB2FDCF8C /* Pods-FindMyFriend.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FindMyFriend.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FindMyFriend/Pods-FindMyFriend.debug.xcconfig"; sourceTree = "<group>"; };
 		985E0FC0ECECA0A64B4D79D3 /* libPods-FindMyFriend.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FindMyFriend.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,7 +73,6 @@
 		112F68431EF95D4C0043E091 = {
 			isa = PBXGroup;
 			children = (
-				112F68771EFF8A3D0043E091 /* Model.xcdatamodeld */,
 				112F684E1EF95D4C0043E091 /* FindMyFriend */,
 				112F684D1EF95D4C0043E091 /* Products */,
 				112F68661EF961920043E091 /* Frameworks */,
@@ -86,6 +91,11 @@
 		112F684E1EF95D4C0043E091 /* FindMyFriend */ = {
 			isa = PBXGroup;
 			children = (
+				112F68A31EFF946C0043E091 /* MyLocation+CoreDataClass.h */,
+				112F68A41EFF946C0043E091 /* MyLocation+CoreDataClass.m */,
+				112F68A51EFF946C0043E091 /* MyLocation+CoreDataProperties.h */,
+				112F68A61EFF946C0043E091 /* MyLocation+CoreDataProperties.m */,
+				112F68A01EFF91F60043E091 /* MyLocation.xcdatamodeld */,
 				112F68521EF95D4C0043E091 /* AppDelegate.h */,
 				112F68531EF95D4C0043E091 /* AppDelegate.m */,
 				112F686B1EFC16C30043E091 /* DXHTTPManager.h */,
@@ -265,10 +275,12 @@
 				112F68571EF95D4C0043E091 /* ViewController.m in Sources */,
 				112F68761EFE98390043E091 /* CreateAnnotation.m in Sources */,
 				112F686D1EFC16C30043E091 /* DXHTTPManager.m in Sources */,
-				112F68791EFF8A3D0043E091 /* Model.xcdatamodeld in Sources */,
 				112F68541EF95D4C0043E091 /* AppDelegate.m in Sources */,
+				112F68A71EFF946C0043E091 /* MyLocation+CoreDataClass.m in Sources */,
 				112F68701EFE1ECF0043E091 /* GetFriend.m in Sources */,
+				112F68A81EFF946C0043E091 /* MyLocation+CoreDataProperties.m in Sources */,
 				112F68511EF95D4C0043E091 /* main.m in Sources */,
+				112F68A21EFF91F60043E091 /* MyLocation.xcdatamodeld in Sources */,
 				112F68731EFE3A5D0043E091 /* RequestMaster.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,13 +449,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		112F68771EFF8A3D0043E091 /* Model.xcdatamodeld */ = {
+		112F68A01EFF91F60043E091 /* MyLocation.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				112F68781EFF8A3D0043E091 /* Model.xcdatamodel */,
+				112F68A11EFF91F60043E091 /* MyLocation.xcdatamodel */,
 			);
-			currentVersion = 112F68781EFF8A3D0043E091 /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
+			currentVersion = 112F68A11EFF91F60043E091 /* MyLocation.xcdatamodel */;
+			path = MyLocation.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

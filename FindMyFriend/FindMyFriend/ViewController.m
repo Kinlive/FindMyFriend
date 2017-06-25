@@ -12,12 +12,17 @@
 #import "RequestMaster.h"
 #import "GetFriend.h"
 #import "CreateAnnotation.h"
+#import "MyLocation+CoreDataClass.h"
+#import "AppDelegate.h"
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>
 {
     CLLocationManager *locationManager;
     CLLocation *lastLocation;
     RequestMaster *requestMaster;
     NSArray<GetFriend*> *friendsInfo ;//裝入requestMaster回傳的info
+    MyLocation *myCoreData;
+    NSManagedObjectContext *context;
+    NSEntityDescription *entity;
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
@@ -44,6 +49,17 @@
         [locationManager startUpdatingLocation];
 //    }
      requestMaster = [RequestMaster new];
+    ///=====coredata use
+    context = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).persistentContainer.viewContext;
+    myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:context];
+    entity = [NSEntityDescription entityForName:@"MyLocation" inManagedObjectContext:context];
+    
+    
+    
+//    NSArray *results = []
+    
+//    myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:[self ]]
+
     
 }
 
@@ -65,7 +81,15 @@
         region.span = MKCoordinateSpanMake(0.01, 0.01);
         [_mainMapView setRegion:region  animated: true];
     });
-
+//core data save
+    NSError *error ;
+    myCoreData.latitude = lastLocation.coordinate.latitude;
+    myCoreData.lontitude = lastLocation.coordinate.longitude;
+    if(![context save:&error]){
+        NSLog(@"error!");
+    }else{
+        NSLog(@"Save coordinate OK!!!!!");
+    }
     
 }
 //Swith for request Server (on/off).
