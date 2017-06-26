@@ -10,13 +10,18 @@
 
 @implementation CoreDataMaster
 
--(void)initSomething{
-    ///=====coredata use
-    //1. create context
-    context = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).persistentContainer.viewContext;
-    //2. create entity
-    entity = [NSEntityDescription entityForName:@"MyLocation" inManagedObjectContext:context];
+-(instancetype)initWithSomething {
+    self = [super init];
+    if (self) {
+        ///=====coredata use
+        //1. create context
+        context = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).persistentContainer.viewContext;
+        //2. create entity
+        entity = [NSEntityDescription entityForName:@"MyLocation" inManagedObjectContext:context];
+    }
+    return self;
 }
+
 -(void) startSaveDataWithLat:(double)latitude andLon:(double)longitude{
   
     //3. When created both of context & entity then get new object
@@ -26,7 +31,7 @@
     //4. Object set value(entity property) ..
     myCoreData.latitude = latitude;
     myCoreData.longitude = longitude;
-//    myCoreData.dateTime = [NSDate date];
+    myCoreData.dateTime = [NSDate date];
     //5. Context save .
     if (![context save:&error]) {
         NSLog(@"Save Error!!");

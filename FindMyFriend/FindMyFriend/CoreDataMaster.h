@@ -15,7 +15,7 @@
     NSManagedObjectContext *context;
     NSEntityDescription *entity;
 }
--(void) initSomething;
+-(instancetype)initWithSomething;
 -(void) startSaveDataWithLat:(double) latitude andLon:(double) longitude;
 -(void) getSaveData;
 

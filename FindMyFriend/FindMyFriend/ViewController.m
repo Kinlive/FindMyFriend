@@ -12,8 +12,7 @@
 #import "RequestMaster.h"
 #import "GetFriend.h"
 #import "CreateAnnotation.h"
-#import "MyLocation+CoreDataClass.h"
-#import "AppDelegate.h"
+#import "CoreDataMaster.h"
 
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>
 {
@@ -21,10 +20,7 @@
     CLLocation *lastLocation;
     RequestMaster *requestMaster;
     NSArray<GetFriend*> *friendsInfo ;//裝入requestMaster回傳的info
-    MyLocation *myCoreData;
-    NSManagedObjectContext *context;
-    NSEntityDescription *entity;
-
+    CoreDataMaster *cdMaster;
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
@@ -53,13 +49,12 @@
         [locationManager startUpdatingLocation];
 //    }
      requestMaster = [RequestMaster new];
-    ///=====coredata use
-    //1. create context
-    context = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).persistentContainer.viewContext;
-    //2. create entity
-    entity = [NSEntityDescription entityForName:@"MyLocation" inManagedObjectContext:context];
+    ///=====coredata cdMaster init
+    cdMaster = [[CoreDataMaster alloc] initWithSomething];
+    
     
     //sketch the route
+    
    
 }
 
@@ -81,33 +76,12 @@
         region.span = MKCoordinateSpanMake(0.01, 0.01);
         [_mainMapView setRegion:region  animated: true];
     });
-//    //3. When created both of context & entity then get new object
-    myCoreData = [NSEntityDescription insertNewObjectForEntityForName:@"MyLocation" inManagedObjectContext:context];
-    //Data save.
-    NSError *error ;
-    //4. Object set value(entity property) ..
-    myCoreData.latitude = lastLocation.coordinate.latitude;
-    myCoreData.longitude = lastLocation.coordinate.longitude;
-    myCoreData.dateTime = [NSDate date];
-    //5. Context save .
-//    if (![context save:&error]) {
-//        NSLog(@"Save Error!!");
-//    }else{
-//        NSLog(@"Save Is  OK!!");
-//    }
+    //
+    [cdMaster startSaveDataWithLat:coordinate.latitude andLon:coordinate.longitude];
 }
 //Get Data button
 - (IBAction)getData:(id)sender {
-    //6. FetchRequest : it's for get saved data
-    NSError *error;
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entity];
-    //to get all data in database.
-    NSArray *results = [[context executeFetchRequest:request error:&error] copy];
-    for(MyLocation *p in results){
-        NSLog(@"Here get Data!!!!");
-        NSLog(@">>>> Latitude : %lf  , Longitude : %lf   andData: %@",p.latitude , p.longitude,p.dateTime);
-    }
+    [cdMaster getSaveData];
 }
 
 //Swith for request Server (on/off).
@@ -160,7 +134,7 @@
     CLLocationCoordinate2D sourceCoor = CLLocationCoordinate2DMake(25.13653, 121.504188);
     
     CLLocationCoordinate2D destinationCoor = CLLocationCoordinate2DMake(24.9643521, 121.1916667);
-    MKPlacemark *sourceMark = [[MKPlacemark alloc] initWithCoordinate:sourceCoor];
+//    MKPlacemark *sourceMark = [[MKPlacemark alloc] initWithCoordinate:sourceCoor];
     MKPlacemark *destinationMark = [[MKPlacemark alloc] initWithCoordinate:destinationCoor];
     MKMapItem *currenMapItem = [MKMapItem mapItemForCurrentLocation];
     MKMapItem *destinationMapItem = [[MKMapItem alloc] initWithPlacemark:destinationMark];
