@@ -33,11 +33,13 @@
 @end
 
 @implementation ViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
+    _mainMapView.delegate = self;
 //    [locationManager requestWhenInUseAuthorization];
     [locationManager requestAlwaysAuthorization];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -57,6 +59,8 @@
     //2. create entity
     entity = [NSEntityDescription entityForName:@"MyLocation" inManagedObjectContext:context];
     
+    //sketch the route
+   
 }
 
 
@@ -86,12 +90,11 @@
     myCoreData.longitude = lastLocation.coordinate.longitude;
     myCoreData.dateTime = [NSDate date];
     //5. Context save .
-    if (![context save:&error]) {
-        NSLog(@"Save Error!!");
-    }else{
-        NSLog(@"Save Is  OK!!");
-    }
-
+//    if (![context save:&error]) {
+//        NSLog(@"Save Error!!");
+//    }else{
+//        NSLog(@"Save Is  OK!!");
+//    }
 }
 //Get Data button
 - (IBAction)getData:(id)sender {
@@ -103,7 +106,7 @@
     NSArray *results = [[context executeFetchRequest:request error:&error] copy];
     for(MyLocation *p in results){
         NSLog(@"Here get Data!!!!");
-        NSLog(@">>>> Latitude : %lf  , Lontitude : %lf   andData: %@",p.latitude , p.longitude,p.dateTime);
+        NSLog(@">>>> Latitude : %lf  , Longitude : %lf   andData: %@",p.latitude , p.longitude,p.dateTime);
     }
 }
 
@@ -152,7 +155,49 @@
     result.canShowCallout = true;
     return  result;
 }
-
+//Navigation Button
+- (IBAction)navigationButton:(id)sender {
+    CLLocationCoordinate2D sourceCoor = CLLocationCoordinate2DMake(25.13653, 121.504188);
+    
+    CLLocationCoordinate2D destinationCoor = CLLocationCoordinate2DMake(24.9643521, 121.1916667);
+    MKPlacemark *sourceMark = [[MKPlacemark alloc] initWithCoordinate:sourceCoor];
+    MKPlacemark *destinationMark = [[MKPlacemark alloc] initWithCoordinate:destinationCoor];
+    MKMapItem *currenMapItem = [MKMapItem mapItemForCurrentLocation];
+    MKMapItem *destinationMapItem = [[MKMapItem alloc] initWithPlacemark:destinationMark];
+    MKPointAnnotation *sourceAnno =[MKPointAnnotation new];
+    MKPointAnnotation *destinationAnno = [[MKPointAnnotation alloc] init];
+    sourceAnno.coordinate = sourceCoor;
+    sourceAnno.title = @"起點";
+    destinationAnno.coordinate = destinationCoor;
+    destinationAnno.title = @"終點";
+    [_mainMapView addAnnotation:sourceAnno];
+    [_mainMapView addAnnotation:destinationAnno];
+//    [_mainMapView addAnnotations:<#(nonnull NSArray<id<MKAnnotation>> *)#>]
+    //剛show完 兩點圖標
+    MKDirectionsRequest *dirRequest = [MKDirectionsRequest new];
+    dirRequest.source = currenMapItem;
+    dirRequest.destination = destinationMapItem;
+//    dirRequest.transportType = 
+    MKDirections *direction = [[MKDirections alloc] initWithRequest:dirRequest];
+    [direction calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
+        if ( response == nil) {
+            NSLog(@"Error : %@" , error);
+            return ;
+        }
+        MKRoute *route = response.routes[0];
+        [_mainMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+        [_mainMapView setRegion:MKCoordinateRegionForMapRect(route.polyline.boundingMapRect)];
+        
+    }];
+    
+}
+//實現繪製路線
+-(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
+    MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
+    renderer.strokeColor = [UIColor redColor];
+    renderer.lineWidth = 4.0 ;
+    return  renderer;
+}
 //-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 //    NSLog(@"Error here: .....%@" , error);
 //}
