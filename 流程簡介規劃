@@ -1,0 +1,54 @@
+1.支援IOS 9.0以上
+ＯＫ2.背景時仍可持續取得User位置
+	{內建裝置篇 P.31 &P.36
+	http://www.jianshu.com/p/6d0eafaee85b
+	http://www.jianshu.com/p/8a380acf3e23
+	}
+ＯＫ3.將目前User位置回報給Server,並可切換關閉或開啟回報
+	{
+	取得最後定位 P.35
+	網路應用篇P.21 URLSession應用
+	mapView IBAc
+	didUpdateLocation
+	regionDidChanged
+	下網址為location應用,但不完全是
+	https://codereview.stackexchange.com/questions/135348/core-location-background-update-and-upload-to-server
+	========================
+	網路應用P.34 AFNetworking
+	當碰到一個bug : http://www.jianshu.com/p/212a128c9a33
+	========================
+
+
+	}
+OK4.於地圖上顯示自己以及朋友的位置
+若是有需要才進行解碼
+NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+==================================
+朋友的annotation回傳陣列 
+
+
+
+
+OK5.持續取得的位置以資料庫作保存
+	{
+	資料管理篇page 5  library application. support
+	==how creat coreData
+	https://useyourloaf.com/blog/core-data-code-generation/
+	
+	==how use persistContainer
+	https://stackoverflow.com/questions/42243603/adding-coredata-into-an-existing-project-using-objective-c
+
+	==core data 教學
+	http://www.iotec.tw/?p=170
+
+
+	}
+
+6.將自己的移動軌跡繪製於地圖上
+	{
+	需要地圖當user移動時,跟著畫面移動
+	1.完成點對點功能,目前還差原點自動移動功能,以及任意點一點可在進行計算導航
+
+	藉由回傳朋友的Annotaion進行繪製路線
+	}
+

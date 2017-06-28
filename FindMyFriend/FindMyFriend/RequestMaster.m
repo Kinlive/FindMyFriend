@@ -31,7 +31,7 @@
 //    infoResult = [NSArray new];
     DXHTTPManager *manager = [DXHTTPManager manager];
     NSString *url = GETINFOURL_TAG;
-    [manager GET:url parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+      [manager GET:url parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         //..
 //        NSLog(@"回報中.....%@", url);
         NSLog(@"Server response:%@", responseObject);

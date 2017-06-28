@@ -102,16 +102,12 @@
 //To get friends info's button.
 - (IBAction)getMyfriend:(id)sender {
     friendsInfo = [requestMaster startGetFriendsInfo];
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 5.0* NSEC_PER_SEC);
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 3.0* NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^{
         ////////做個時間延遲,因此時還沒載入資料,但friendsInfo卻使用到了會crash
         ///add friends anotation on map ...
-         int countFriends = 0;
-        while (countFriends  < friendsInfo.count ) {
             CreateAnnotation *anno = [CreateAnnotation new];
-            [_mainMapView addAnnotation:[anno createAnnotationWithFriendsInfo:friendsInfo andCountFriends:countFriends]];
-            countFriends += 1 ;
-        }
+            [_mainMapView addAnnotations:[anno createAnnotationWithFriendsInfo:friendsInfo]];
     });
 }
 //When add one friend anotation ,it will ask this method...
@@ -120,6 +116,8 @@
         return nil;
     }
     NSString *identifier = @"friend";
+    //dequeueReusableAnnotationViewWithIdentifier
+    //尋找畫面上有沒有任何沒有使用的annotationView
     MKPinAnnotationView *result = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     if( result == nil){
         result = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];

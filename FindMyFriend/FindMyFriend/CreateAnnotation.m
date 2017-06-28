@@ -10,7 +10,10 @@
 
 @implementation CreateAnnotation
 
--(MKPointAnnotation*)createAnnotationWithFriendsInfo:(NSArray<GetFriend *> *)friendsInfo andCountFriends:(int) countFriends{
+-(NSArray<MKPointAnnotation*>*)createAnnotationWithFriendsInfo:(NSArray<GetFriend *> *)friendsInfo {
+    int countFriends = 0;
+    NSMutableArray<MKPointAnnotation*> *annoArray = [NSMutableArray new];
+    while(countFriends <friendsInfo.count){
         double lat = friendsInfo[countFriends].lat ;
         double lon = friendsInfo[countFriends].lon;
         //Create friends coordinate
@@ -19,7 +22,10 @@
         friendAnno.coordinate = friendCoord;
         friendAnno.title = friendsInfo[countFriends].name;
         friendAnno.subtitle = friendsInfo[countFriends].dateTime;
+        [annoArray addObject:friendAnno];
+        countFriends += 1;
+    }
 //        NSLog(@"TITLE:有沒有拿到%@",friendAnno.title);
-    return friendAnno;
+    return annoArray;
 }
 @end

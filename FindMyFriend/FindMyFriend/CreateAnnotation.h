@@ -11,5 +11,5 @@
 #import "GetFriend.h"
 @interface CreateAnnotation : NSObject
 @property (nonatomic,weak) MKMapView *mainMapView;
--(MKPointAnnotation*) createAnnotationWithFriendsInfo:(NSArray<GetFriend*>*)friendsInfo andCountFriends:(int) countFriends;
+-(NSArray<MKPointAnnotation*>*) createAnnotationWithFriendsInfo:(NSArray<GetFriend*>*)friendsInfo;
 @end
