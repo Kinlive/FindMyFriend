@@ -21,6 +21,8 @@
     RequestMaster *requestMaster;
     NSArray<GetFriend*> *friendsInfo ;//裝入requestMaster回傳的info
     CoreDataMaster *cdMaster;
+    MKRoute *route;
+    CLLocationCoordinate2D fakeCoordinate;
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
@@ -53,7 +55,8 @@
     cdMaster = [[CoreDataMaster alloc] initWithSomething];
     
     
-    //sketch the route
+    //fake Location define
+    fakeCoordinate = CLLocationCoordinate2DMake(24.9643521, 121.1916667 );
     
    
 }
@@ -106,11 +109,15 @@
     dispatch_after(time, dispatch_get_main_queue(), ^{
         ////////做個時間延遲,因此時還沒載入資料,但friendsInfo卻使用到了會crash
         ///add friends anotation on map ...
-            CreateAnnotation *anno = [CreateAnnotation new];
+        CreateAnnotation *anno = [CreateAnnotation new];
+        if (_mainMapView.annotations == nil) {
             [_mainMapView addAnnotations:[anno createAnnotationWithFriendsInfo:friendsInfo]];
+        }
+        [_mainMapView removeAnnotations:_mainMapView.annotations];
+        [_mainMapView addAnnotations:[anno createAnnotationWithFriendsInfo:friendsInfo]];
     });
 }
-//When add one friend anotation ,it will ask this method...
+//When mapView get annotations ,it will ask this method...
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
     if (annotation == mapView.userLocation){
         return nil;
@@ -129,39 +136,31 @@
 }
 //Navigation Button
 - (IBAction)navigationButton:(id)sender {
-    CLLocationCoordinate2D sourceCoor = CLLocationCoordinate2DMake(25.13653, 121.504188);
-    
-    CLLocationCoordinate2D destinationCoor = CLLocationCoordinate2DMake(24.9643521, 121.1916667);
-//    MKPlacemark *sourceMark = [[MKPlacemark alloc] initWithCoordinate:sourceCoor];
+    //1.create coordinate
+    CLLocationCoordinate2D resourceCoor = CLLocationCoordinate2DMake(24.9643521, 121.1916667);
+    CLLocationCoordinate2D destinationCoor = fakeCoordinate;
+    //2.create placemark with coordinate
+    MKPlacemark *resourceMark = [[MKPlacemark alloc] initWithCoordinate:resourceCoor];
     MKPlacemark *destinationMark = [[MKPlacemark alloc] initWithCoordinate:destinationCoor];
-    MKMapItem *currenMapItem = [MKMapItem mapItemForCurrentLocation];
+    //3.create mapItem with placeMark
+//    MKMapItem *currenMapItem = [MKMapItem mapItemForCurrentLocation];
+    MKMapItem *currenMapItem = [[MKMapItem alloc] initWithPlacemark:resourceMark];
     MKMapItem *destinationMapItem = [[MKMapItem alloc] initWithPlacemark:destinationMark];
-    MKPointAnnotation *sourceAnno =[MKPointAnnotation new];
-    MKPointAnnotation *destinationAnno = [[MKPointAnnotation alloc] init];
-    sourceAnno.coordinate = sourceCoor;
-    sourceAnno.title = @"起點";
-    destinationAnno.coordinate = destinationCoor;
-    destinationAnno.title = @"終點";
-    [_mainMapView addAnnotation:sourceAnno];
-    [_mainMapView addAnnotation:destinationAnno];
-//    [_mainMapView addAnnotations:<#(nonnull NSArray<id<MKAnnotation>> *)#>]
-    //剛show完 兩點圖標
+    //4.get direction with sourceMapItem and destinationMapItem
     MKDirectionsRequest *dirRequest = [MKDirectionsRequest new];
     dirRequest.source = currenMapItem;
     dirRequest.destination = destinationMapItem;
-//    dirRequest.transportType = 
     MKDirections *direction = [[MKDirections alloc] initWithRequest:dirRequest];
+    
     [direction calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if ( response == nil) {
             NSLog(@"Error : %@" , error);
             return ;
         }
-        MKRoute *route = response.routes[0];
+        route = response.routes[0];
         [_mainMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
         [_mainMapView setRegion:MKCoordinateRegionForMapRect(route.polyline.boundingMapRect)];
-        
     }];
-    
 }
 //實現繪製路線
 -(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
@@ -173,4 +172,14 @@
 //-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 //    NSLog(@"Error here: .....%@" , error);
 //}
+- (IBAction)moveLeft:(id)sender {
+    fakeCoordinate.latitude -= 0.00005;
+}
+- (IBAction)moveRight:(id)sender {
+    fakeCoordinate.latitude += 00005;
+}
+
+
+
+
 @end

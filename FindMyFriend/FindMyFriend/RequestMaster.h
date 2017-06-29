@@ -18,6 +18,8 @@
 #define LAT_TAG @"lat"
 #define LON_TAG @"lon"
 #define KEY_TAG @"friends"
+#import "AFNetworking.h"
+
 
 @interface RequestMaster : NSObject{
     NSArray<GetFriend*> *infoResult;

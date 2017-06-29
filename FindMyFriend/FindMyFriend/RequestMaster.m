@@ -12,6 +12,7 @@
 
 -(void) startRequestServerWithCoordinateLat:(NSString*) lat andLon:(NSString*) lon{
     //AFNetworking 基本使用流程
+
     DXHTTPManager *manager = [DXHTTPManager manager];
     NSString *url = UPLOADURL_TAG;
     NSString *parameters = [NSString stringWithFormat:@"GroupName=%@&UserName=%@&Lat=%@&Lon=%@",GROUPNAME_TAG,USERNAME_TAG,lat,lon];
