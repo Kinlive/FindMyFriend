@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11160AB01F051C3600AA2D8A /* DrawRouteMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 11160AAF1F051C3600AA2D8A /* DrawRouteMaster.m */; };
 		112F68511EF95D4C0043E091 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68501EF95D4C0043E091 /* main.m */; };
 		112F68541EF95D4C0043E091 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68531EF95D4C0043E091 /* AppDelegate.m */; };
 		112F68571EF95D4C0043E091 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 112F68561EF95D4C0043E091 /* ViewController.m */; };
@@ -25,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11160AAE1F051C3600AA2D8A /* DrawRouteMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawRouteMaster.h; sourceTree = "<group>"; };
+		11160AAF1F051C3600AA2D8A /* DrawRouteMaster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawRouteMaster.m; sourceTree = "<group>"; };
 		112F684C1EF95D4C0043E091 /* FindMyFriend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindMyFriend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		112F68501EF95D4C0043E091 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		112F68521EF95D4C0043E091 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -103,6 +106,8 @@
 				112F68721EFE3A5D0043E091 /* RequestMaster.m */,
 				112F686E1EFE1ECF0043E091 /* GetFriend.h */,
 				112F686F1EFE1ECF0043E091 /* GetFriend.m */,
+				11160AAE1F051C3600AA2D8A /* DrawRouteMaster.h */,
+				11160AAF1F051C3600AA2D8A /* DrawRouteMaster.m */,
 				112F68581EF95D4C0043E091 /* Main.storyboard */,
 				112F685B1EF95D4C0043E091 /* Assets.xcassets */,
 				112F685D1EF95D4C0043E091 /* LaunchScreen.storyboard */,
@@ -274,6 +279,7 @@
 				112F68701EFE1ECF0043E091 /* GetFriend.m in Sources */,
 				112F68511EF95D4C0043E091 /* main.m in Sources */,
 				112F68A21EFF91F60043E091 /* MyLocation.xcdatamodeld in Sources */,
+				11160AB01F051C3600AA2D8A /* DrawRouteMaster.m in Sources */,
 				112F68AB1EFFBD9A0043E091 /* CoreDataMaster.m in Sources */,
 				112F68731EFE3A5D0043E091 /* RequestMaster.m in Sources */,
 			);

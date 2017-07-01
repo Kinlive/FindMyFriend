@@ -13,6 +13,7 @@
 #import "GetFriend.h"
 #import "CreateAnnotation.h"
 #import "CoreDataMaster.h"
+#import "DrawRouteMaster.h"
 
 @interface ViewController () <CLLocationManagerDelegate,MKMapViewDelegate>
 {
@@ -21,8 +22,12 @@
     RequestMaster *requestMaster;
     NSArray<GetFriend*> *friendsInfo ;//裝入requestMaster回傳的info
     CoreDataMaster *cdMaster;
-    MKRoute *route;
+    MKRoute *route;//
     CLLocationCoordinate2D fakeCoordinate;
+    DrawRouteMaster *drawMaster;//
+    CLLocation *firstLocation;//
+    NSMutableArray<CLLocation*> *lastLocationsArray;
+    
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
@@ -48,19 +53,25 @@
 //        [locationManager requestLocation];
 //    }
 //    else {
-        [locationManager startUpdatingLocation];
+//        [locationManager startUpdatingLocation];
+    NSTimer *currentTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(startUpdateLocation) userInfo:nil repeats:YES];
+
 //    }
      requestMaster = [RequestMaster new];
     ///=====coredata cdMaster init
     cdMaster = [[CoreDataMaster alloc] initWithSomething];
-    
-    
     //fake Location define
     fakeCoordinate = CLLocationCoordinate2DMake(24.9643521, 121.1916667 );
+    drawMaster = [[DrawRouteMaster alloc] init];
+   ////for polyline define
+    lastLocationsArray = [[NSMutableArray alloc] init];
     
-   
+    
+    
 }
-
+-(void)startUpdateLocation{
+    [locationManager startUpdatingLocation];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -71,16 +82,32 @@
     lastLocation = locations.lastObject;
     CLLocationCoordinate2D coordinate = location.coordinate;
     NSLog(@"Current location: %.6f , %.6f", coordinate.latitude , coordinate.longitude);
+    //for polyline use
+    [lastLocationsArray addObject: lastLocation];
+    //polyline use done here.
+    
     //進行一次畫面初始化時的顯示比例
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        firstLocation = locations.firstObject;
         MKCoordinateRegion region ;
         region.center = coordinate ;
         region.span = MKCoordinateSpanMake(0.01, 0.01);
         [_mainMapView setRegion:region  animated: true];
     });
-    //
-    [cdMaster startSaveDataWithLat:coordinate.latitude andLon:coordinate.longitude];
+    
+    //會一直存先關掉
+//    [cdMaster startSaveDataWithLat:coordinate.latitude andLon:coordinate.longitude];
+    
+    /////test continous sketch
+//    CLLocationCoordinate2D resourceCoor = firstLocation.coordinate;
+//    CLLocationCoordinate2D destinationCoor = location.coordinate;
+//    [self startNavigationWith:resourceCoor and:destinationCoor];
+
+    [self showUserRoute];
+    
+    [locationManager stopUpdatingLocation];
+    
 }
 //Get Data button
 - (IBAction)getData:(id)sender {
@@ -92,14 +119,20 @@
     CLLocationCoordinate2D coordinate = lastLocation.coordinate;
     NSString *strLat = [NSString stringWithFormat:@"%f",coordinate.latitude];
     NSString *strLon = [NSString stringWithFormat:@"%f",coordinate.longitude];
+    NSTimer *reportTime;
     if(_switchStatus.on){
 //        UIAlertController *alert = UIAlertViewStyleDefault;
         //記得加警告視窗詢問user
         //upload.
-        [requestMaster startRequestServerWithCoordinateLat:strLat andLon:strLon];
-       }else{
+        reportTime = [NSTimer scheduledTimerWithTimeInterval:10 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            [requestMaster startRequestServerWithCoordinateLat:strLat andLon:strLon];
+        }];
+        
+       }else if(!_switchStatus.on){
            //做一個提示使用者關閉回報的訊息
         NSLog(@"使用者關閉回報!!");
+            [reportTime invalidate];
+            reportTime = nil;
     }
 }
 //To get friends info's button.
@@ -113,6 +146,7 @@
         if (_mainMapView.annotations == nil) {
             [_mainMapView addAnnotations:[anno createAnnotationWithFriendsInfo:friendsInfo]];
         }
+        //avoid annotations when refresh be more
         [_mainMapView removeAnnotations:_mainMapView.annotations];
         [_mainMapView addAnnotations:[anno createAnnotationWithFriendsInfo:friendsInfo]];
     });
@@ -139,44 +173,66 @@
     //1.create coordinate
     CLLocationCoordinate2D resourceCoor = CLLocationCoordinate2DMake(24.9643521, 121.1916667);
     CLLocationCoordinate2D destinationCoor = fakeCoordinate;
-    //2.create placemark with coordinate
-    MKPlacemark *resourceMark = [[MKPlacemark alloc] initWithCoordinate:resourceCoor];
-    MKPlacemark *destinationMark = [[MKPlacemark alloc] initWithCoordinate:destinationCoor];
-    //3.create mapItem with placeMark
-//    MKMapItem *currenMapItem = [MKMapItem mapItemForCurrentLocation];
-    MKMapItem *currenMapItem = [[MKMapItem alloc] initWithPlacemark:resourceMark];
-    MKMapItem *destinationMapItem = [[MKMapItem alloc] initWithPlacemark:destinationMark];
-    //4.get direction with sourceMapItem and destinationMapItem
-    MKDirectionsRequest *dirRequest = [MKDirectionsRequest new];
-    dirRequest.source = currenMapItem;
-    dirRequest.destination = destinationMapItem;
+    [self startNavigationWith:resourceCoor and:destinationCoor];
+}
+////Navigation method
+-(void)startNavigationWith:(CLLocationCoordinate2D)resourceCoor and: (CLLocationCoordinate2D)destinationCoor{
+    //1.create coordinate
+    MKDirectionsRequest *dirRequest = [drawMaster getCoordinateWith:resourceCoor and:destinationCoor];
     MKDirections *direction = [[MKDirections alloc] initWithRequest:dirRequest];
-    
     [direction calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if ( response == nil) {
             NSLog(@"Error : %@" , error);
             return ;
         }
-        route = response.routes[0];
+        route = response.routes.lastObject;
         [_mainMapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
         [_mainMapView setRegion:MKCoordinateRegionForMapRect(route.polyline.boundingMapRect)];
     }];
 }
-//實現繪製路線
+//實現路線繪製器
 -(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay{
     MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
     renderer.strokeColor = [UIColor redColor];
-    renderer.lineWidth = 4.0 ;
+    renderer.lineWidth = 1.0 ;
     return  renderer;
 }
 //-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
 //    NSLog(@"Error here: .....%@" , error);
 //}
+
+
+
 - (IBAction)moveLeft:(id)sender {
-    fakeCoordinate.latitude -= 0.00005;
+//    fakeCoordinate.latitude -= 0.00005;
+    CLLocationCoordinate2D userCoordinates[lastLocationsArray.count];
+    int i = 0;
+    //get user's coordinates in for drawpolyline method use
+    for (CLLocation *location in lastLocationsArray ){
+        userCoordinates[i] = location.coordinate;
+        i++;
+    }
+    //將每一個uesr自己的coordinate加入到 coordinates 陣列內
+    MKPolyline *selfPolyline = [MKPolyline polylineWithCoordinates:userCoordinates count:lastLocationsArray.count];
+    [_mainMapView addOverlay:selfPolyline];
+    [_mainMapView rendererForOverlay:selfPolyline];
+}
+-(void)showUserRoute{
+    CLLocationCoordinate2D userCoordinates[lastLocationsArray.count];
+    int i = 0;
+    //get user's coordinates in for drawpolyline method use
+    for (CLLocation *location in lastLocationsArray ){
+        userCoordinates[i] = location.coordinate;
+        i++;
+    }
+    //將每一個uesr自己的coordinate加入到 coordinates 陣列內
+    MKPolyline *selfPolyline = [MKPolyline polylineWithCoordinates:userCoordinates count:lastLocationsArray.count];
+    [_mainMapView addOverlay:selfPolyline];
+    [_mainMapView rendererForOverlay:selfPolyline];
+
 }
 - (IBAction)moveRight:(id)sender {
-    fakeCoordinate.latitude += 00005;
+    fakeCoordinate.latitude += 0.00005;
 }
 
 
