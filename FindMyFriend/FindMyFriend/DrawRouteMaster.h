@@ -11,4 +11,5 @@
 #import <CoreLocation/CoreLocation.h>
 @interface DrawRouteMaster : NSObject
 -(MKDirectionsRequest*)getCoordinateWith:(CLLocationCoordinate2D)resourceCoor and:(CLLocationCoordinate2D)destinationCoor;
+-(MKPolyline*)showUserSportRouteOn:(NSMutableArray<CLLocation*>*)lastLocationsArray ;
 @end

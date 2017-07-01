@@ -24,4 +24,16 @@
 //    MKDirections *direction = [[MKDirections alloc] initWithRequest:dirRequest];
     return dirRequest;
 }
+-(MKPolyline *)showUserSportRouteOn:(NSMutableArray<CLLocation *> *)lastLocationsArray{
+    CLLocationCoordinate2D userCoordinates[lastLocationsArray.count];
+    int i = 0;
+    //get user's coordinates in for drawpolyline method use
+    for (CLLocation *location in lastLocationsArray ){
+        userCoordinates[i] = location.coordinate;
+        i++;
+    }
+    //將每一個uesr自己的coordinate加入到 coordinates 陣列內
+    MKPolyline *selfPolyline = [MKPolyline polylineWithCoordinates:userCoordinates count:lastLocationsArray.count];
+    return  selfPolyline;
+}
 @end

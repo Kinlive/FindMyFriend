@@ -12,7 +12,6 @@
 
 -(void) startRequestServerWithCoordinateLat:(NSString*) lat andLon:(NSString*) lon{
     //AFNetworking 基本使用流程
-
     DXHTTPManager *manager = [DXHTTPManager manager];
     NSString *url = UPLOADURL_TAG;
     NSString *parameters = [NSString stringWithFormat:@"GroupName=%@&UserName=%@&Lat=%@&Lon=%@",GROUPNAME_TAG,USERNAME_TAG,lat,lon];
@@ -60,7 +59,7 @@
     }];
     return getFriendArray;
 }// 方法結束
-
+//這個方法不一定需要
 -(NSArray<GetFriend*>*)getInfoResult{
     NSLog(@"TITLE有沒有拿到2:%@" , infoResult[0].name);
     return infoResult;
