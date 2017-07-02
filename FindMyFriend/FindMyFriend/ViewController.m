@@ -26,10 +26,16 @@
     DrawRouteMaster *drawMaster;//
     NSMutableArray<CLLocation*> *lastLocationsArray;
     NSTimer *reportTimer;
+    NSTimer *saveDataTimer;
+    NSTimer *sportTimer;
     MKPointAnnotation *whichFriend;
 }
 @property (weak, nonatomic) IBOutlet UISwitch *switchStatus;
 @property (weak, nonatomic) IBOutlet MKMapView *mainMapView;
+@property (weak, nonatomic) IBOutlet UISwitch *saveSWStatus;
+@property (weak, nonatomic) IBOutlet UISwitch *sportSWStatus;
+@property (weak, nonatomic) IBOutlet UILabel *deviceVersion;
+
 
 @end
 
@@ -37,6 +43,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //Get user device version to do something check.
+    NSString *iosVersion = [UIDevice currentDevice].systemVersion;
+    _deviceVersion.text = iosVersion;
     // Do any additional setup after loading the view, typically from a nib.
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
@@ -52,8 +61,7 @@
 //    }
 //    else {
         [locationManager startUpdatingLocation];
-//    NSTimer *currentTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(startUpdateLocation) userInfo:nil repeats:YES];
-//    }
+    //RequestMaster init
      requestMaster = [RequestMaster new];
     ///=====coredata cdMaster init
     cdMaster = [[CoreDataMaster alloc] initWithSomething];
@@ -85,10 +93,6 @@
         region.span = MKCoordinateSpanMake(0.01, 0.01);
         [_mainMapView setRegion:region  animated: true];
     });
-    //會一直存先關掉
-//    [cdMaster startSaveDataWithLat:coordinate.latitude andLon:coordinate.longitude];
-//顯示運動軌跡
-    [self showUserRoute];
 }
 //Get Data button
 - (IBAction)getData:(id)sender {
@@ -101,12 +105,24 @@
     NSString *strLat = [NSString stringWithFormat:@"%f",coordinate.latitude];
     NSString *strLon = [NSString stringWithFormat:@"%f",coordinate.longitude];
     if(_switchStatus.on){
-//        UIAlertController *alert = UIAlertViewStyleDefault;
-        //記得加警告視窗詢問user
-        //upload.
-        reportTimer = [NSTimer scheduledTimerWithTimeInterval:60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        //
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"若開啟時將會每分鐘進行使用者座標回報的動作,確定?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+           
+            //        UIAlertController *alert = UIAlertViewStyleDefault;
+            //記得加警告視窗詢問user
+            //upload.
             [requestMaster startRequestServerWithCoordinateLat:strLat andLon:strLon];
+            reportTimer = [NSTimer scheduledTimerWithTimeInterval:60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+                [requestMaster startRequestServerWithCoordinateLat:strLat andLon:strLon];
+            }];
         }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [_switchStatus setOn:NO];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:ok];
+         [self presentViewController:alert animated:true completion:nil];
        }else if(!_switchStatus.on){
            //做一個提示使用者關閉回報的訊息
         NSLog(@"使用者關閉回報!!");
@@ -114,6 +130,36 @@
             reportTimer = nil;
     }
 }
+- (IBAction)saveData:(id)sender {
+    if (_saveSWStatus.on){
+        [cdMaster startSaveDataWithLat:lastLocation.coordinate.latitude andLon:lastLocation.coordinate.longitude];
+        saveDataTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            [cdMaster startSaveDataWithLat:lastLocation.coordinate.latitude andLon:lastLocation.coordinate.longitude];
+        }];
+    }else {
+        [saveDataTimer invalidate];
+        saveDataTimer = nil;
+    }
+}
+- (IBAction)startSportMode:(id)sender {
+    if (_sportSWStatus.on) {
+        //在開始顯示前先將原先抓取到的位置清除
+        lastLocationsArray = [NSMutableArray new];
+        sportTimer = [NSTimer scheduledTimerWithTimeInterval:2 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            //抓到中心點
+            MKCoordinateRegion region ;
+            region.center = lastLocation.coordinate ;
+            region.span = MKCoordinateSpanMake(0.005, 0.005);
+            [_mainMapView setRegion:region  animated: true];
+            //顯示運動軌跡
+            [self showUserRoute];
+        }];
+    }else{
+        [sportTimer invalidate];
+        sportTimer = nil;
+    }
+}
+
 //To get friends info's button.
 - (IBAction)getMyfriend:(id)sender {
     friendsInfo = [requestMaster startGetFriendsInfo];
@@ -159,7 +205,9 @@
 }
 //for friend annotation use...
 -(void)findFriendButton:(id)sender{
+    
     [self startNavigationWith:lastLocation.coordinate and:whichFriend.coordinate];
+
 }
 ////Navigation method
 -(void)startNavigationWith:(CLLocationCoordinate2D)resourceCoor and: (CLLocationCoordinate2D)destinationCoor{
